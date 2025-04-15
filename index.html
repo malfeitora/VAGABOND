@@ -1,136 +1,147 @@
-<!DOCTYPE html><html lang="pt-br">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Árvore de Habilidades - VAGABOND</title>
+    <title>VAGABOND - Árvore de Habilidades</title>
     <style>
         body {
-            background-color: #0e0e0e;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWkbAM130_7CvsqZdfB8h7bsP89mtkCweHAW7q4MlQoM8BEUlp6J0jjCs&s=10') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Garamond', serif;
+            color: #f5f5dc;
         }
         .skill-tree {
             display: grid;
-            grid-template-columns: repeat(5, 150px);
-            grid-auto-rows: 180px;
-            gap: 40px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+            padding: 80px;
             position: relative;
         }
         .skill {
+            position: relative;
             text-align: center;
             cursor: pointer;
-            position: relative;
         }
         .skill img {
-            width: 100px;
-            height: 100px;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            transition: 0.3s;
+            width: 80px;
+            height: 80px;
+            border: 3px solid gold;
+            border-radius: 12px;
+            background-color: rgba(0, 0, 0, 0.6);
         }
-        .skill img:hover {
-            transform: scale(1.1);
-        }
-        .skill .info {
+        .floating-info {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 2px solid #c9a36d;
+            padding: 20px;
+            border-radius: 12px;
             display: none;
-            margin-top: 10px;
-            background: #1e1e1e;
-            padding: 10px;
-            border-radius: 10px;
+            z-index: 999;
+            text-align: center;
         }
-        .skill .button-container {
-            margin-top: 5px;
+        .floating-info img {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 10px;
         }
-        .connector {
+        .connect-line {
             position: absolute;
-            width: 4px;
-            background-color: #fff;
+            width: 2px;
+            background-color: gold;
             z-index: 0;
         }
-        .horizontal {
-            height: 4px;
-            width: 150px;
+        .button-pericia {
+            margin-top: 12px;
+            padding: 6px 12px;
+            background-color: #444;
+            border: 1px solid #c9a36d;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
         }
-        .vertical {
-            height: 180px;
-            width: 4px;
+        .button-pericia:hover {
+            background-color: #666;
         }
     </style>
 </head>
 <body>
-    <h1>Árvore de Habilidades - VAGABOND</h1>
-    <div class="skill-tree" id="skillTree"></div><script>
+    <div class="skill-tree" id="skillTree">
+        <!-- Skills serão inseridas via JavaScript -->
+    </div><div class="floating-info" id="skillInfo">
+    <img id="infoIcon" src="" alt="Skill Icon">
+    <div id="infoText"></div>
+    <button class="button-pericia" onclick="realizarPericia()">Perícia</button>
+</div>
+
+<script>
     const skills = [
-        "Stampede_skill_icon.png",
-        "Shield_Charge_skill_icon.png",
-        "Shield_Wall_skill_icon.png",
-        "Seismic_Cry_skill_icon.png",
-        "Scavenged_Plating_skill_icon.png",
-        "Rolling_Slam_skill_icon.png",
-        "Resonating_Shield_skill_icon.png",
-        "Raise_Shield_skill_icon.png",
-        "Quarterstaff_Strike_skill_icon (1).png",
-        "Punch_skill_icon (1).png",
-        "Perfect_Strike_skill_icon.png",
-        "Parry_skill_icon.png",
-        "Mace_Strike_skill_icon.png",
-        "Leap_Slam_skill_icon.png",
-        "Infernal_Cry_skill_icon.png",
-        "Boneshatter_skill_icon.png",
-        "Berserk_skill_icon (1).png",
-        "Armour_Breaker_skill_icon (1).png",
-        "Ancestral_Warrior_Totem_skill_icon.png",
-        "Ancestral_Spirits_skill_icon.png"
+        { id: 'skill1', name: 'Stampede', icon: 'Stampede_skill_icon.png' },
+        { id: 'skill2', name: 'Shield Charge', icon: 'Shield_Charge_skill_icon.png' },
+        { id: 'skill3', name: 'Shield Wall', icon: 'Shield_Wall_skill_icon.png' },
+        { id: 'skill4', name: 'Seismic Cry', icon: 'Seismic_Cry_skill_icon.png' },
+        { id: 'skill5', name: 'Scavenged Plating', icon: 'Scavenged_Plating_skill_icon.png' },
+        { id: 'skill6', name: 'Rolling Slam', icon: 'Rolling_Slam_skill_icon.png' },
+        { id: 'skill7', name: 'Resonating Shield', icon: 'Resonating_Shield_skill_icon.png' },
+        { id: 'skill8', name: 'Raise Shield', icon: 'Raise_Shield_skill_icon.png' },
+        { id: 'skill9', name: 'Quarterstaff Strike', icon: 'Quarterstaff_Strike_skill_icon (1).png' },
+        { id: 'skill10', name: 'Punch', icon: 'Punch_skill_icon (1).png' },
+        { id: 'skill11', name: 'Perfect Strike', icon: 'Perfect_Strike_skill_icon.png' },
+        { id: 'skill12', name: 'Parry', icon: 'Parry_skill_icon.png' },
+        { id: 'skill13', name: 'Mace Strike', icon: 'Mace_Strike_skill_icon.png' },
+        { id: 'skill14', name: 'Leap Slam', icon: 'Leap_Slam_skill_icon.png' },
+        { id: 'skill15', name: 'Infernal Cry', icon: 'Infernal_Cry_skill_icon.png' },
+        { id: 'skill16', name: 'Boneshatter', icon: 'Boneshatter_skill_icon.png' },
+        { id: 'skill17', name: 'Berserk', icon: 'Berserk_skill_icon (1).png' },
+        { id: 'skill18', name: 'Armour Breaker', icon: 'Armour_Breaker_skill_icon (1).png' },
+        { id: 'skill19', name: 'Ancestral Warrior Totem', icon: 'Ancestral_Warrior_Totem_skill_icon.png' },
+        { id: 'skill20', name: 'Ancestral Spirits', icon: 'Ancestral_Spirits_skill_icon.png' },
     ];
 
-    const skillTree = document.getElementById("skillTree");
-    const attributes = ["Força", "Destreza", "Inteligência", "Vitalidade"];
-
-    let unlockedSkills = [true];
-    let skillLevels = Array(skills.length).fill(0);
+    const treeContainer = document.getElementById("skillTree");
 
     skills.forEach((skill, index) => {
         const skillDiv = document.createElement("div");
-        skillDiv.classList.add("skill");
-        skillDiv.innerHTML = `
-            <img src="${skill}" data-index="${index}" onclick="showInfo(this)">
-            <div class="info" id="info_${index}">
-                <div id="attr_${index}"></div>
-                <div class="button-container">
-                    <button onclick="startTest(${index})">Perícia</button>
-                </div>
-            </div>
-        `;
-        skillTree.appendChild(skillDiv);
+        skillDiv.className = "skill";
+        skillDiv.innerHTML = `<img src="${skill.icon}" onclick="mostrarInfo('${skill.id}', '${skill.name}', '${skill.icon}')">`;
+        treeContainer.appendChild(skillDiv);
     });
 
-    function showInfo(img) {
-        const index = img.dataset.index;
-        const infoBox = document.getElementById(`info_${index}`);
-        infoBox.style.display = infoBox.style.display === "block" ? "none" : "block";
+    function mostrarInfo(id, name, icon) {
+        const skillInfo = document.getElementById("skillInfo");
+        const infoIcon = document.getElementById("infoIcon");
+        const infoText = document.getElementById("infoText");
+        const stats = gerarAtributos();
 
-        // Exibir atributos
-        const level = skillLevels[index];
-        let attrHTML = `<strong>Nível: ${level}/3</strong><br>`;
-        attributes.forEach(attr => {
-            const value = 1 + level * 2;
-            attrHTML += `${attr}: ${value}<br>`;
-        });
-        document.getElementById(`attr_${index}`).innerHTML = attrHTML;
+        infoIcon.src = icon;
+        infoText.innerHTML = `
+            <strong>${name}</strong><br>
+            Força: ${stats.str}<br>
+            Destreza: ${stats.dex}<br>
+            Fé: ${stats.fth}<br>
+            Inteligência: ${stats.int}<br>
+            Arcano: ${stats.arc}<br>
+            Defesa: ${stats.def}
+        `;
+        skillInfo.style.display = 'block';
     }
 
-    function startTest(index) {
-        if (skillLevels[index] >= 3) return;
+    function gerarAtributos() {
+        return {
+            str: Math.floor(Math.random() * 3) + 1,
+            dex: Math.floor(Math.random() * 3) + 1,
+            fth: Math.floor(Math.random() * 3) + 1,
+            int: Math.floor(Math.random() * 3) + 1,
+            arc: Math.floor(Math.random() * 3) + 1,
+            def: Math.floor(Math.random() * 3) + 1
+        };
+    }
 
-        skillLevels[index]++;
-        showInfo(document.querySelector(`img[data-index='${index}']`));
-
-        // Desbloqueia a próxima skill se essa chegou a 3/3
-        if (skillLevels[index] === 3 && index + 1 < skills.length) {
-            unlockedSkills[index + 1] = true;
-        }
-
-        alert("Você passou no teste de perícia!");
+    function realizarPericia() {
+        window.location.href = "teste.html";
     }
 </script>
 
