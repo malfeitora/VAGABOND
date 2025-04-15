@@ -1,218 +1,151 @@
 <!DOCTYPE html><html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VAGABOND</title>
-  <style>
-    body {
-      background-color: #0b0b0b;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 40px;
-      color: gold;
-    }
-    .skill-tree {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 40px;
-      position: relative;
-    }
-    .skill {
-      background-color: #1a1a1a;
-      border: 2px solid gold;
-      border-radius: 12px;
-      text-align: center;
-      padding: 12px;
-      width: 240px;
-      opacity: 0.4;
-      pointer-events: none;
-      position: relative;
-      z-index: 2;
-      transition: transform 0.2s;
-    }
-    .skill.unlocked {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .skill:hover {
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-    .skill img {
-      width: 64px;
-      height: 64px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-    .skill .info {
-      font-size: 0.9rem;
-      margin-top: 8px;
-    }
-    .upa-btn {
-      background-color: gold;
-      color: black;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      display: none;
-    }
-    .connector {
-      width: 4px;
-      height: 40px;
-      background: gold;
-      margin: 0 auto;
-    }
-    #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0,0,0,0.7);
-      z-index: 5;
-      display: none;
-    }
-    #test-box {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #222;
-      border: 2px solid gold;
-      padding: 30px;
-      z-index: 10;
-      color: white;
-      display: none;
-      width: 300px;
-      text-align: center;
-    }
-    #test-box button {
-      margin-top: 20px;
-      padding: 8px 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background: gold;
-      border: none;
-      border-radius: 6px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAGABOND</title>
+    <style>
+        body {
+            background: #111;
+            color: #eee;
+            font-family: 'Georgia', serif;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: gold;
+            margin-bottom: 40px;
+        }
+        .skill-tree {
+            display: grid;
+            grid-template-columns: repeat(2, 200px);
+            grid-auto-rows: 150px;
+            gap: 80px 200px;
+            justify-content: center;
+            position: relative;
+        }
+        .skill {
+            position: relative;
+            text-align: center;
+        }
+        .skill img {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            border: 2px solid #fff;
+            border-radius: 12px;
+        }
+        .skill-line {
+            position: absolute;
+            width: 2px;
+            background: gold;
+        }
+        .button-pericia {
+            display: none;
+            margin-top: 10px;
+            background: #333;
+            color: gold;
+            border: 1px solid gold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .active .button-pericia {
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-  <h1>VAGABOND</h1>
-  <div class="skill-tree" id="tree"></div>
-  <div id="overlay"></div>
-  <div id="test-box">
-    <div id="test-text">Carregando desafio...</div>
-    <button onclick="verificarResposta()">Enviar</button>
-  </div>  <script>
-    const habilidades = [
-      { img: 'Stampede_skill_icon.png', nome: 'Stampede', desc: 'Investida poderosa.', level: 0, atributo: 'Físico', valor: 1 },
-      { img: 'Shield_Charge_skill_icon.png', nome: 'Shield Charge', desc: 'Investida com escudo.', level: 0, atributo: 'Físico', valor: 1 },
-      { img: 'Shield_Wall_skill_icon.png', nome: 'Shield Wall', desc: 'Defesa aumentada.', level: 0, atributo: 'Defesa', valor: 1 },
-      // ... (adicione as outras com mesmo padrão)
-    ];
-
-    const tree = document.getElementById('tree');
-    let currentIndex = 0;
-    let lastSkillClicked = null;
-    let desafioAtual = null;
-    let respostaEsperada = '';
-
-    function criarSkillTree() {
-      habilidades.forEach((skillData, index) => {
-        if (index > 0) {
-          const connector = document.createElement('div');
-          connector.className = 'connector';
-          tree.appendChild(connector);
-        }
-
-        const skill = document.createElement('div');
-        skill.className = 'skill';
-        skill.innerHTML = `
-          <img src="${skillData.img}" alt="${skillData.nome}">
-          <div class="info"><strong>${skillData.nome}</strong><br>${skillData.desc}<br>${skillData.atributo}: <span id="valor-${index}">${skillData.valor}</span> <br> Progresso: <span id="level-${index}">0/5</span></div>
-        `;
-
-        const btn = document.createElement('button');
-        btn.className = 'upa-btn';
-        btn.textContent = 'Upar';
-        btn.onclick = () => iniciarTeste(skill, index);
-        skill.appendChild(btn);
-
-        skill.onclick = () => {
-          if (skill.classList.contains('unlocked')) {
-            btn.style.display = 'inline-block';
-            lastSkillClicked = skill;
-          }
-        };
-
-        if (index === 0) skill.classList.add('unlocked');
-        tree.appendChild(skill);
-      });
+    <h1>VAGABOND</h1>
+    <div class="skill-tree" id="tree">
+        <div class="skill active" onclick="selectSkill(this)">
+            <img src="Stampede_skill_icon.png" alt="Stampede">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Shield_Charge_skill_icon.png" alt="Shield Charge">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Shield_Wall_skill_icon.png" alt="Shield Wall">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Seismic_Cry_skill_icon.png" alt="Seismic Cry">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Scavenged_Plating_skill_icon.png" alt="Scavenged Plating">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Rolling_Slam_skill_icon.png" alt="Rolling Slam">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Resonating_Shield_skill_icon.png" alt="Resonating Shield">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Raise_Shield_skill_icon.png" alt="Raise Shield">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Quarterstaff_Strike_skill_icon (1).png" alt="Quarterstaff Strike">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Punch_skill_icon (1).png" alt="Punch">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Perfect_Strike_skill_icon.png" alt="Perfect Strike">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Parry_skill_icon.png" alt="Parry">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Mace_Strike_skill_icon.png" alt="Mace Strike">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Leap_Slam_skill_icon.png" alt="Leap Slam">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Infernal_Cry_skill_icon.png" alt="Infernal Cry">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Boneshatter_skill_icon.png" alt="Boneshatter">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Berserk_skill_icon (1).png" alt="Berserk">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Armour_Breaker_skill_icon (1).png" alt="Armour Breaker">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Ancestral_Warrior_Totem_skill_icon.png" alt="Ancestral Warrior Totem">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+        <div class="skill" onclick="selectSkill(this)">
+            <img src="Ancestral_Spirits_skill_icon.png" alt="Ancestral Spirits">
+            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
+        </div>
+    </div><script>
+    function selectSkill(skillEl) {
+        skillEl.classList.toggle('active');
     }
 
-    function iniciarTeste(skill, index) {
-      desafioAtual = index;
-      gerarDesafio();
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('test-box').style.display = 'block';
+    function startTest() {
+        window.location.href = 'teste.html';
     }
+</script>
 
-    function gerarDesafio() {
-      const tipo = Math.floor(Math.random() * 3);
-      const txt = document.getElementById('test-text');
-
-      if (tipo === 0) {
-        // Matemática
-        let a = Math.floor(Math.random() * 10 + 1);
-        let b = Math.floor(Math.random() * 10 + 1);
-        respostaEsperada = (a + b).toString();
-        txt.innerHTML = `Quanto é ${a} + ${b}? <br><input type='text' id='resposta'>`;
-      } else if (tipo === 1) {
-        // Ordem
-        let palavras = ['guerreiro', 'escudo', 'fúria', 'armadura'];
-        let mistura = palavras.sort(() => 0.5 - Math.random());
-        respostaEsperada = palavras.sort().join('');
-        txt.innerHTML = `Coloque essas palavras em ordem alfabética: ${mistura.join(', ')} <br><input type='text' id='resposta'>`;
-      } else {
-        // Simples quebra cabeça de lógica
-        respostaEsperada = '4';
-        txt.innerHTML = `Se 2 cães pegam 2 ossos em 2 minutos, quantos cães para 4 ossos em 2 minutos? <br><input type='text' id='resposta'>`;
-      }
-    }
-
-    function verificarResposta() {
-      const valor = document.getElementById('resposta').value.toLowerCase().replace(/\s/g, '');
-      if (valor === respostaEsperada) {
-        habilidades[desafioAtual].level++;
-        habilidades[desafioAtual].valor++;
-
-        document.getElementById(`level-${desafioAtual}`).textContent = `${habilidades[desafioAtual].level}/5`;
-        document.getElementById(`valor-${desafioAtual}`).textContent = habilidades[desafioAtual].valor;
-
-        if (habilidades[desafioAtual].level >= 5 && habilidades[desafioAtual + 1]) {
-          document.querySelectorAll('.skill')[desafioAtual + 1].classList.add('unlocked');
-          alert('Nova habilidade desbloqueada!');
-        }
-
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('test-box').style.display = 'none';
-      } else {
-        alert('Resposta incorreta! Tente novamente.');
-      }
-    }
-
-    criarSkillTree();
-  </script></body>
+</body>
 </html>
