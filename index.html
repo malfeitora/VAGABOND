@@ -1,151 +1,112 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VAGABOND</title>
-    <style>
-        body {
-            background: #111;
-            color: #eee;
-            font-family: 'Georgia', serif;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: gold;
-            margin-bottom: 40px;
-        }
-        .skill-tree {
-            display: grid;
-            grid-template-columns: repeat(2, 200px);
-            grid-auto-rows: 150px;
-            gap: 80px 200px;
-            justify-content: center;
-            position: relative;
-        }
-        .skill {
-            position: relative;
-            text-align: center;
-        }
-        .skill img {
-            width: 100px;
-            height: 100px;
-            cursor: pointer;
-            border: 2px solid #fff;
-            border-radius: 12px;
-        }
-        .skill-line {
-            position: absolute;
-            width: 2px;
-            background: gold;
-        }
-        .button-pericia {
-            display: none;
-            margin-top: 10px;
-            background: #333;
-            color: gold;
-            border: 1px solid gold;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .active .button-pericia {
-            display: inline-block;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VAGABOND - Árvore de Habilidades</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: 'Georgia', serif;
+      margin: 0;
+      padding: 20px;
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWkbAM130_7CvsqZdfB8h7bsP89mtkCweHAW7q4MlQoM8BEUlp6J0jjCs&s=10');
+      background-size: cover;
+      background-attachment: fixed;
+    }
+    .tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 60px;
+      position: relative;
+    }
+    .row {
+      display: flex;
+      gap: 60px;
+    }
+    .row.reverse {
+      flex-direction: row-reverse;
+    }
+    .skill {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .skill:hover {
+      transform: scale(1.1);
+    }
+    .skill img {
+      width: 64px;
+      height: 64px;
+      border: 2px solid gold;
+      border-radius: 8px;
+      background-color: #000;
+    }
+    .pericia-btn {
+      margin-top: 8px;
+      padding: 4px 10px;
+      background-color: #222;
+      border: 1px solid gold;
+      border-radius: 4px;
+      color: white;
+      display: none;
+    }
+    .connector {
+      position: absolute;
+      width: 2px;
+      background-color: gold;
+      z-index: 0;
+    }
+  </style>
 </head>
 <body>
-    <h1>VAGABOND</h1>
-    <div class="skill-tree" id="tree">
-        <div class="skill active" onclick="selectSkill(this)">
-            <img src="Stampede_skill_icon.png" alt="Stampede">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Shield_Charge_skill_icon.png" alt="Shield Charge">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Shield_Wall_skill_icon.png" alt="Shield Wall">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Seismic_Cry_skill_icon.png" alt="Seismic Cry">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Scavenged_Plating_skill_icon.png" alt="Scavenged Plating">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Rolling_Slam_skill_icon.png" alt="Rolling Slam">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Resonating_Shield_skill_icon.png" alt="Resonating Shield">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Raise_Shield_skill_icon.png" alt="Raise Shield">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Quarterstaff_Strike_skill_icon (1).png" alt="Quarterstaff Strike">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Punch_skill_icon (1).png" alt="Punch">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Perfect_Strike_skill_icon.png" alt="Perfect Strike">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Parry_skill_icon.png" alt="Parry">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Mace_Strike_skill_icon.png" alt="Mace Strike">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Leap_Slam_skill_icon.png" alt="Leap Slam">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Infernal_Cry_skill_icon.png" alt="Infernal Cry">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Boneshatter_skill_icon.png" alt="Boneshatter">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Berserk_skill_icon (1).png" alt="Berserk">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Armour_Breaker_skill_icon (1).png" alt="Armour Breaker">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Ancestral_Warrior_Totem_skill_icon.png" alt="Ancestral Warrior Totem">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-        <div class="skill" onclick="selectSkill(this)">
-            <img src="Ancestral_Spirits_skill_icon.png" alt="Ancestral Spirits">
-            <button class="button-pericia" onclick="event.stopPropagation();startTest()">Perícia</button>
-        </div>
-    </div><script>
-    function selectSkill(skillEl) {
-        skillEl.classList.toggle('active');
-    }
+  <h1 style="text-align: center; color: gold;">VAGABOND - Árvore de Habilidades</h1>
+  <div class="tree" id="skillTree">
+    <!-- As linhas da árvore serão geradas via JavaScript -->
+  </div>  <script>
+    const skills = [
+      "Stampede_skill_icon.png", "Shield_Charge_skill_icon.png", "Shield_Wall_skill_icon.png",
+      "Seismic_Cry_skill_icon.png", "Scavenged_Plating_skill_icon.png", "Rolling_Slam_skill_icon.png",
+      "Resonating_Shield_skill_icon.png", "Raise_Shield_skill_icon.png", "Quarterstaff_Strike_skill_icon (1).png",
+      "Punch_skill_icon (1).png", "Perfect_Strike_skill_icon.png", "Parry_skill_icon.png",
+      "Mace_Strike_skill_icon.png", "Leap_Slam_skill_icon.png", "Infernal_Cry_skill_icon.png",
+      "Boneshatter_skill_icon.png", "Berserk_skill_icon (1).png", "Armour_Breaker_skill_icon (1).png",
+      "Ancestral_Warrior_Totem_skill_icon.png", "Ancestral_Spirits_skill_icon.png"
+    ];
 
-    function startTest() {
-        window.location.href = 'teste.html';
-    }
-</script>
+    const treeContainer = document.getElementById('skillTree');
 
-</body>
+    for (let i = 0; i < skills.length; i += 3) {
+      const row = document.createElement('div');
+      row.classList.add('row');
+      if ((i / 3) % 2 !== 0) row.classList.add('reverse');
+
+      for (let j = i; j < i + 3 && j < skills.length; j++) {
+        const skill = document.createElement('div');
+        skill.classList.add('skill');
+
+        const img = document.createElement('img');
+        img.src = `./skills/${skills[j]}`;
+        img.alt = `Skill ${j + 1}`;
+        img.onclick = () => {
+          const btn = skill.querySelector('.pericia-btn');
+          btn.style.display = 'block';
+        };
+
+        const btn = document.createElement('button');
+        btn.classList.add('pericia-btn');
+        btn.innerText = 'Perícia';
+        btn.onclick = () => window.location.href = 'teste.html';
+
+        skill.appendChild(img);
+        skill.appendChild(btn);
+        row.appendChild(skill);
+      }
+      treeContainer.appendChild(row);
+    }
+  </script></body>
 </html>
