@@ -1,172 +1,128 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VAGABOND - Árvore de Habilidades</title>
-  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <title>Árvore de Habilidades</title>
   <style>
     body {
-      font-family: 'MedievalSharp', cursive;
+      margin: 0;
       background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWkbAM130_7CvsqZdfB8h7bsP89mtkCweHAW7q4MlQoM8BEUlp6J0jjCs&s=10') no-repeat center center fixed;
       background-size: cover;
-      margin: 0;
-      color: #f4e8c1;
+      font-family: 'Garamond', serif;
     }
-    h1 {
-      text-align: center;
-      font-size: 3em;
-      padding: 20px;
-      text-shadow: 2px 2px #000;
-    }
-    .skill-tree {
+    .tree-container {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 60px;
-      padding: 40px;
+      padding: 50px 0;
     }
-    .skill {
+    .row {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+      gap: 30px;
       position: relative;
-      cursor: pointer;
     }
-    .skill img {
-      width: 80px;
-      border: 3px solid #6e4b1e;
-      border-radius: 8px;
-      background-color: #1e1a14;
-    }
-    .skill-line {
-      height: 60px;
-      width: 3px;
-      background: #d4af37;
-    }
-    .floating-info {
-      position: absolute;
-      top: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(30, 26, 20, 0.9);
-      padding: 20px;
-      border: 2px solid #d4af37;
-      border-radius: 10px;
-      width: 250px;
-      text-align: center;
-      display: none;
-      z-index: 10;
-    }
-    .floating-info img {
+    .icon {
       width: 64px;
-    }
-    .test-btn {
-      background: #d4af37;
-      border: none;
-      padding: 10px;
-      font-weight: bold;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    .questionnaire {
-      display: none;
-      padding: 30px;
-      background: rgba(0, 0, 0, 0.85);
-      color: white;
-      font-family: 'MedievalSharp', cursive;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80%;
-      border: 3px solid #d4af37;
+      height: 64px;
+      background-color: #222;
+      border: 3px solid #aaa;
       border-radius: 10px;
-      z-index: 20;
+      background-size: cover;
     }
-    .questionnaire h2 {
-      margin-bottom: 15px;
+    svg.lines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
   </style>
 </head>
 <body>
-  <h1>VAGABOND - Árvore de Habilidades</h1>
-  <div class="skill-tree" id="skillTree">
-    <!-- As habilidades são carregadas via script -->
-  </div>  <div class="questionnaire" id="testModal">
-    <h2>O TESTE</h2>
-    <p>"Neste mundo, algumas habilidades são sempre necessárias aprender para aumentar seus atributos, dito isso, para você aumentar os atributos da árvore da sua classe, responda as questões abaixo"</p>
-    <ol>
-      <li>Qual é o nome da árvore primordial presente no coração do mundo de Árvores & Feitiços?</li>
-      <li>Quantos fragmentos da Estrela Dourada existem?</li>
-      <li>Qual é o elemento proibido usado pelos monges da Névoa?</li>
-      <li>Quem foi o primeiro Guardião dos Ramos Eternos?</li>
-      <li>Como se invoca o selo de proteção da Árvore Venerável?</li>
-      <li>O que representa o símbolo do Duque nas escrituras antigas?</li>
-      <li>Qual criatura habita a base da Árvore Negra?</li>
-      <li>Como se desfaz um feitiço de Aprisionamento Dracônico?</li>
-      <li>Quais são os efeitos colaterais da bênção do Pólen da Rosa Sombria?</li>
-      <li>Quem escreveu o "Cântico dos 9 Ramos"?</li>
-      <li>Qual o papel dos Ecos das Folhas na magia avançada?</li>
-      <li>Por que não se deve cruzar os portões de Espinhos ao amanhecer?</li>
-    </ol>
-    <button onclick="closeTest()" class="test-btn">Finalizar</button>
-  </div>  <script>
-    const skills = [
-      'Stampede_skill_icon.png',
-      'Shield_Charge_skill_icon.png',
-      'Shield_Wall_skill_icon.png',
-      'Seismic_Cry_skill_icon.png',
-      'Scavenged_Plating_skill_icon.png',
-      'Rolling_Slam_skill_icon.png',
-      'Resonating_Shield_skill_icon.png',
-      'Raise_Shield_skill_icon.png',
-      'Quarterstaff_Strike_skill_icon (1).png',
-      'Punch_skill_icon (1).png',
-      'Perfect_Strike_skill_icon.png',
-      'Parry_skill_icon.png',
-      'Mace_Strike_skill_icon.png',
-      'Leap_Slam_skill_icon.png',
-      'Infernal_Cry_skill_icon.png',
-      'Boneshatter_skill_icon.png',
-      'Berserk_skill_icon (1).png',
-      'Armour_Breaker_skill_icon (1).png',
-      'Ancestral_Warrior_Totem_skill_icon.png',
-      'Ancestral_Spirits_skill_icon.png'
-    ];
+  <div class="tree-container" id="tree">
+    <svg class="lines" id="lines"></svg>
+    
+    <div class="row" id="row1">
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/7/79/Miquella_Appearance_Profile.jpg/revision/latest/smart/width/250/height/250?cb=20240710140806');"></div>
+    </div>
+    <div class="row" id="row2">
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/5/54/Elden_Ring_Screenshot_07.jpg/revision/latest/smart/width/250/height/250?cb=20210120142808');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/3/32/ER_General_Radahn.jpg/revision/latest/smart/width/250/height/250?cb=20220217022220');"></div>
+    </div>
+    <div class="row" id="row3">
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/4/45/Messmer%2C_the_Impaler.jpg/revision/latest/smart/width/250/height/250?cb=20240223113557');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/f/f9/ER_Godfrey%2C_First_Elden_Lord.png/revision/latest/smart/width/250/height/250?cb=20230704162405');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/f/ff/ER_Maliketh%2C_the_Black_Blade.png/revision/latest/smart/width/250/height/250?cb=20230703173816');"></div>
+    </div>
+    <div class="row" id="row4">
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/f/f5/Queen_Rennala.webp/revision/latest/smart/width/250/height/250?cb=20220228135516');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/4/43/ER_Godrick_the_Grafted.jpg/revision/latest/smart/width/250/height/250?cb=20220417190541');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/9/93/ER_Astel%2C_Naturalborn_of_the_Void.png/revision/latest/scale-to-width-down/128?cb=20230610202105');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/a/a6/ER_Boss_Bayle_the_Dread.png/revision/latest/scale-to-width-down/128?cb=20240819194218');"></div>
+    </div>
+    <div class="row" id="row5">
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/7/74/ER_Boss_Commander_Gaius.png/revision/latest/scale-to-width-down/128?cb=20240820170142');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/0/07/ER_Placidusax_Boss.png/revision/latest/scale-to-width-down/128?cb=20230629180715');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/2/2a/Elden-beast-boss-elden-ring-wiki-guide.jpg/revision/latest/scale-to-width-down/128?cb=20220302171816');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/8/84/ER_Fire_Giant_Phase_2.png/revision/latest/scale-to-width-down/128?cb=20230705191711');"></div>
+    </div>
+    <div class="row" id="row6">
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/3/3c/ER_Lichdragon_Fortissax.png/revision/latest/scale-to-width-down/128?cb=20230520213026');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/1/10/ER_Boss_Metyr%2C_Mother_of_Fingers.png/revision/latest/scale-to-width-down/128?cb=20240826000509');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/4/41/ER_Boss_Midra.png/revision/latest/scale-to-width-down/128?cb=20240822052036');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/5/51/Morgott.jpg/revision/latest/scale-to-width-down/128?cb=20220725162919');"></div>
+    </div>
+    <div class="row" id="row7">
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/2/23/Putrescent_Knight.jpg/revision/latest/scale-to-width-down/128?cb=20240915112004');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/e/e3/ER_Regal_Ancestor_Spirit.png/revision/latest/scale-to-width-down/128?cb=20230601181957');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/0/04/Rellana%2C_Twin_Moon_Knight.png/revision/latest/scale-to-width-down/128?cb=20240626100039');"></div>
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/a/ad/ER_Boss_Romina_Saint_of_the_Bud.png/revision/latest/scale-to-width-down/128?cb=20240826012154');"></div>
+    </div>
+    <div class="row" id="row8">
+      <div class="icon" style="background-image: url('https://static.wikia.nocookie.net/eldenring/images/1/1d/ER_Icon_Remembrance_of_the_Shadow_Sunflower.png/revision/latest/scale-to-width-down/128?cb=20240624165619');"></div>
+    </div>
+  </div>
 
-    const tree = document.getElementById('skillTree');
+  <script>
+    function connectIcons() {
+      const svg = document.getElementById('lines');
+      svg.innerHTML = '';
 
-    skills.forEach((src, index) => {
-      const container = document.createElement('div');
-      container.className = 'skill';
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = 'Skill';
-      img.onclick = () => showInfo(index);
+      const rows = document.querySelectorAll('.row');
+      for (let i = 0; i < rows.length - 1; i++) {
+        const currentRow = rows[i].querySelectorAll('.icon');
+        const nextRow = rows[i + 1].querySelectorAll('.icon');
 
-      const info = document.createElement('div');
-      info.className = 'floating-info';
-      info.id = 'info_' + index;
-      info.innerHTML = `<img src="${src}"><p>Força: ${1 + index}</p><p>Destreza: ${1 + index}</p><p>Fé: ${1 + index}</p><button onclick="showTest()" class="test-btn">Perícia</button>`;
+        currentRow.forEach((iconA, indexA) => {
+          nextRow.forEach((iconB, indexB) => {
+            const rectA = iconA.getBoundingClientRect();
+            const rectB = iconB.getBoundingClientRect();
 
-      container.appendChild(img);
-      container.appendChild(info);
-      if (index > 0) {
-        const line = document.createElement('div');
-        line.className = 'skill-line';
-        tree.appendChild(line);
+            const startX = rectA.left + rectA.width / 2 + window.scrollX;
+            const startY = rectA.top + rectA.height / 2 + window.scrollY;
+            const endX = rectB.left + rectB.width / 2 + window.scrollX;
+            const endY = rectB.top + rectB.height / 2 + window.scrollY;
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', startX);
+            line.setAttribute('y1', startY);
+            line.setAttribute('x2', endX);
+            line.setAttribute('y2', endY);
+            line.setAttribute('stroke', '#c7b279');
+            line.setAttribute('stroke-width', '2');
+            svg.appendChild(line);
+          });
+        });
       }
-      tree.appendChild(container);
-    });
-
-    function showInfo(index) {
-      document.querySelectorAll('.floating-info').forEach(i => i.style.display = 'none');
-      document.getElementById('info_' + index).style.display = 'block';
     }
 
-    function showTest() {
-      document.getElementById('testModal').style.display = 'block';
-    }
-
-    function closeTest() {
-      document.getElementById('testModal').style.display = 'none';
-    }
-  </script></body>
+    window.addEventListener('load', connectIcons);
+    window.addEventListener('resize', connectIcons);
+  </script>
+</body>
 </html>
