@@ -31,7 +31,6 @@
       border: 3px solid #aaa;
       border-radius: 10px;
       background-size: cover;
-      cursor: pointer;
     }
     svg.lines {
       position: absolute;
@@ -42,49 +41,6 @@
       pointer-events: none;
       z-index: 0;
     }
-
-    /* Estilos para o popup */
-    .popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-    }
-    .popup-content {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .popup input {
-      padding: 10px;
-      font-size: 16px;
-    }
-    .popup img {
-      max-width: 100%;
-      max-height: 100px;
-    }
-    .close-btn {
-      background-color: red;
-      color: white;
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    /* Estilos para opções adicionais */
-    .options-container {
-      display: none;
-      gap: 10px;
-    }
   </style>
 </head>
 <body>
@@ -92,134 +48,57 @@
     <svg class="lines" id="lines"></svg>
     
     <div class="row" id="row1">
-      <div class="icon" style="background-image: url(Ancestral_Spirits_skill_icon.png);" onclick="showOptions(this)"></div>
+      <div class="icon" style="background-image: url(Ancestral_Spirits_skill_icon.png);"></div>
     </div>
     <div class="row" id="row2">
-      <div class="icon" style="background-image: url(Ancestral_Warrior_Totem_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Armour_Breaker_skill_icon (1).png);" onclick="showOptions(this)"></div>
+      <div class="icon" style="background-image: url(Ancestral_Warrior_Totem_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Armour_Breaker_skill_icon (1).png);"></div>
     </div>
     <div class="row" id="row3">
-      <div class="icon" style="background-image: url(Berserk_skill_icon (1).png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Boneshatter_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Infernal_Cry_skill_icon.png);" onclick="showOptions(this)"></div>
+      <div class="icon" style="background-image: url(Berserk_skill_icon (1).png);"></div>
+      <div class="icon" style="background-image: url(Boneshatter_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Infernal_Cry_skill_icon.png);"></div>
     </div>
     <div class="row" id="row4">
-      <div class="icon" style="background-image: url(Leap_Slam_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Mace_Strike_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Parry_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Perfect_Strike_skill_icon.png);" onclick="showOptions(this)"></div>
+      <div class="icon" style="background-image: url(Leap_Slam_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Mace_Strike_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Parry_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Perfect_Strike_skill_icon.png);"></div>
     </div>
     <div class="row" id="row5">
-      <div class="icon" style="background-image: url(Punch_skill_icon (1).png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Quarterstaff_Strike_skill_icon (1).png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Raise_Shield_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Resonating_Shield_skill_icon.png);" onclick="showOptions(this)"></div>
+      <div class="icon" style="background-image: url(Punch_skill_icon (1).png);"></div>
+      <div class="icon" style="background-image: url(Quarterstaff_Strike_skill_icon (1).png);"></div>
+      <div class="icon" style="background-image: url(Raise_Shield_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Resonating_Shield_skill_icon.png);"></div>
     </div>
     <div class="row" id="row6">
-      <div class="icon" style="background-image: url(Rolling_Slam_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Scavenged_Plating_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Seismic_Cry_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Shield_Charge_skill_icon.png);" onclick="showOptions(this)"></div>
+      <div class="icon" style="background-image: url(Rolling_Slam_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Scavenged_Plating_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Seismic_Cry_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Shield_Charge_skill_icon.png);"></div>
     </div>
     <div class="row" id="row7">
-      <div class="icon" style="background-image: url(Shield_Wall_skill_icon.png);" onclick="showOptions(this)"></div>
-      <div class="icon" style="background-image: url(Stampede_skill_icon.png);" onclick="showOptions(this)"></div>
-    </div>
-  </div>
-
-  <!-- Popup de adicionar imagem e atributos -->
-  <div class="popup" id="popup">
-    <div class="popup-content">
-      <label for="image-upload">Selecione a imagem da galeria:</label>
-      <input type="file" id="image-upload" accept="image/*">
-      <label for="atributo">Atributo da habilidade:</label>
-      <input type="text" id="atributo" placeholder="Exemplo: Aumenta a força">
-      <button onclick="applyChanges()">Aplicar</button>
-      <button class="close-btn" onclick="closePopup()">Fechar</button>
+      <div class="icon" style="background-image: url(Shield_Wall_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Stampede_skill_icon.png);"></div>
     </div>
   </div>
 
   <script>
-    let selectedIcon = null;
-
-    // Função para abrir as opções ao clicar no ícone
-    function showOptions(iconElement) {
-      selectedIcon = iconElement;
-      const optionsContainer = document.createElement('div');
-      optionsContainer.classList.add('options-container');
-      
-      // Adicionar opções de imagem e habilidades
-      const addImageOption = document.createElement('button');
-      addImageOption.textContent = 'Adicionar imagem da galeria';
-      addImageOption.onclick = function() {
-        openImagePopup();
-      };
-      
-      const createAbilityOption = document.createElement('button');
-      createAbilityOption.textContent = 'Criar habilidade para a skill';
-      createAbilityOption.onclick = function() {
-        createAbility();
-      };
-
-      optionsContainer.appendChild(addImageOption);
-      optionsContainer.appendChild(createAbilityOption);
-
-      iconElement.appendChild(optionsContainer);
-    }
-
-    // Função para abrir o popup de imagem
-    function openImagePopup() {
-      document.getElementById('popup').style.display = 'flex';
-    }
-
-    // Função para fechar o popup
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-    }
-
-    // Função para aplicar a imagem e os atributos ao ícone selecionado
-    function applyChanges() {
-      const fileInput = document.getElementById('image-upload');
-      const atributoInput = document.getElementById('atributo');
-      const file = fileInput.files[0];
-      const atributo = atributoInput.value;
-
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          selectedIcon.style.backgroundImage = `url(${e.target.result})`;
-        };
-        reader.readAsDataURL(file);
-      }
-
-      if (atributo) {
-        console.log('Atributo da habilidade:', atributo); // Aqui você pode manipular atributos da habilidade.
-      }
-
-      closePopup();
-    }
-
-    // Função para criar a habilidade
-    function createAbility() {
-      const abilityDescription = prompt('Digite a descrição da habilidade:');
-      if (abilityDescription) {
-        console.log('Nova habilidade criada:', abilityDescription); // Aqui você pode adicionar lógica para salvar as habilidades.
-      }
-    }
-
-    // Conectar os ícones com linhas
     function connectIcons() {
       const svg = document.getElementById('lines');
       svg.innerHTML = '';
 
       const rows = document.querySelectorAll('.row');
+      // Ajustar as conexões para serem mais organizadas
       for (let i = 0; i < rows.length - 1; i++) {
         const currentRow = rows[i].querySelectorAll('.icon');
         const nextRow = rows[i + 1].querySelectorAll('.icon');
 
+        // Conectar somente ícones diretamente relacionados
         for (let j = 0; j < currentRow.length; j++) {
           for (let k = 0; k < nextRow.length; k++) {
-            if (Math.abs(j - k) <= 1) {
+            // Defina critérios específicos para as conexões
+            if (Math.abs(j - k) <= 1) { // Conectar apenas ícones próximos
               const rectA = currentRow[j].getBoundingClientRect();
               const rectB = nextRow[k].getBoundingClientRect();
 
