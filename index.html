@@ -31,6 +31,7 @@
       border: 3px solid #aaa;
       border-radius: 10px;
       background-size: cover;
+      cursor: pointer;
     }
     svg.lines {
       position: absolute;
@@ -41,6 +42,22 @@
       pointer-events: none;
       z-index: 0;
     }
+    #skillInfo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+      max-width: 400px;
+      text-align: center;
+    }
+    #skillInfo h3 {
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 <body>
@@ -48,39 +65,45 @@
     <svg class="lines" id="lines"></svg>
     
     <div class="row" id="row1">
-      <div class="icon" style="background-image: url(Ancestral_Spirits_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Ancestral_Spirits_skill_icon.png);" data-skill-name="Ancestral Spirits"></div>
     </div>
     <div class="row" id="row2">
-      <div class="icon" style="background-image: url(Ancestral_Warrior_Totem_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Armour_Breaker_skill_icon (1).png);"></div>
+      <div class="icon" style="background-image: url(Ancestral_Warrior_Totem_skill_icon.png);" data-skill-name="Ancestral Warrior Totem"></div>
+      <div class="icon" style="background-image: url(Armour_Breaker_skill_icon (1).png);" data-skill-name="Armour Breaker"></div>
     </div>
     <div class="row" id="row3">
-      <div class="icon" style="background-image: url(Berserk_skill_icon (1).png);"></div>
-      <div class="icon" style="background-image: url(Boneshatter_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Infernal_Cry_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Berserk_skill_icon (1).png);" data-skill-name="Berserk"></div>
+      <div class="icon" style="background-image: url(Boneshatter_skill_icon.png);" data-skill-name="Boneshatter"></div>
+      <div class="icon" style="background-image: url(Infernal_Cry_skill_icon.png);" data-skill-name="Infernal Cry"></div>
     </div>
     <div class="row" id="row4">
-      <div class="icon" style="background-image: url(Leap_Slam_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Mace_Strike_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Parry_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Perfect_Strike_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Leap_Slam_skill_icon.png);" data-skill-name="Leap Slam"></div>
+      <div class="icon" style="background-image: url(Mace_Strike_skill_icon.png);" data-skill-name="Mace Strike"></div>
+      <div class="icon" style="background-image: url(Parry_skill_icon.png);" data-skill-name="Parry"></div>
+      <div class="icon" style="background-image: url(Perfect_Strike_skill_icon.png);" data-skill-name="Perfect Strike"></div>
     </div>
     <div class="row" id="row5">
-      <div class="icon" style="background-image: url(Punch_skill_icon (1).png);"></div>
-      <div class="icon" style="background-image: url(Quarterstaff_Strike_skill_icon (1).png);"></div>
-      <div class="icon" style="background-image: url(Raise_Shield_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Resonating_Shield_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Punch_skill_icon (1).png);" data-skill-name="Punch"></div>
+      <div class="icon" style="background-image: url(Quarterstaff_Strike_skill_icon (1).png);" data-skill-name="Quarterstaff Strike"></div>
+      <div class="icon" style="background-image: url(Raise_Shield_skill_icon.png);" data-skill-name="Raise Shield"></div>
+      <div class="icon" style="background-image: url(Resonating_Shield_skill_icon.png);" data-skill-name="Resonating Shield"></div>
     </div>
     <div class="row" id="row6">
-      <div class="icon" style="background-image: url(Rolling_Slam_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Scavenged_Plating_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Seismic_Cry_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Shield_Charge_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Rolling_Slam_skill_icon.png);" data-skill-name="Rolling Slam"></div>
+      <div class="icon" style="background-image: url(Scavenged_Plating_skill_icon.png);" data-skill-name="Scavenged Plating"></div>
+      <div class="icon" style="background-image: url(Seismic_Cry_skill_icon.png);" data-skill-name="Seismic Cry"></div>
+      <div class="icon" style="background-image: url(Shield_Charge_skill_icon.png);" data-skill-name="Shield Charge"></div>
     </div>
     <div class="row" id="row7">
-      <div class="icon" style="background-image: url(Shield_Wall_skill_icon.png);"></div>
-      <div class="icon" style="background-image: url(Stampede_skill_icon.png);"></div>
+      <div class="icon" style="background-image: url(Shield_Wall_skill_icon.png);" data-skill-name="Shield Wall"></div>
+      <div class="icon" style="background-image: url(Stampede_skill_icon.png);" data-skill-name="Stampede"></div>
     </div>
+  </div>
+
+  <div id="skillInfo">
+    <h3 id="skillTitle"></h3>
+    <p id="skillDescription"></p>
+    <button onclick="closeSkillInfo()">Fechar</button>
   </div>
 
   <script>
@@ -121,8 +144,67 @@
       }
     }
 
-    window.addEventListener('load', connectIcons);
-    window.addEventListener('resize', connectIcons);
+    function showSkillInfo(event) {
+      const skillName = event.target.getAttribute('data-skill-name');
+      const skillInfo = getSkillInfo(skillName);
+
+      if (skillInfo) {
+        document.getElementById('skillTitle').textContent = skillInfo.name;
+        document.getElementById('skillDescription').textContent = skillInfo.description;
+        document.getElementById('skillInfo').style.display = 'block';
+      }
+    }
+
+    function closeSkillInfo() {
+      document.getElementById('skillInfo').style.display = 'none';
+    }
+
+    function getSkillInfo(skillName) {
+      const skills = {
+        "Ancestral Spirits": {
+          name: "Ancestral Spirits",
+          description: "Invoca espíritos ancestrais que ajudam o usuário a curar e aumentar a resistência."
+        },
+        "Ancestral Warrior Totem": {
+          name: "Ancestral Warrior Totem",
+          description: "Invoca um totem de guerreiro ancestral que luta ao lado do usuário."
+        },
+        "Armour Breaker": {
+          name: "Armour Breaker",
+          description: "Quebra a armadura do inimigo, tornando-o mais vulnerável a danos."
+        },
+        "Berserk": {
+          name: "Berserk",
+          description: "Aumenta temporariamente a força e a velocidade do usuário, mas diminui a defesa."
+        },
+        "Boneshatter": {
+          name: "Boneshatter",
+          description: "Causa um golpe devastador que quebra ossos, reduzindo a mobilidade do inimigo."
+        },
+        "Infernal Cry": {
+          name: "Infernal Cry",
+          description: "Libera um grito infernal que causa dano e reduz a moral dos inimigos próximos."
+        },
+        "Leap Slam": {
+          name: "Leap Slam",
+          description: "Realiza um salto agressivo, atingindo inimigos em uma área ao redor do impacto."
+        },
+        // Adicione mais habilidades conforme necessário
+      };
+
+      return skills[skillName] || null;
+    }
+
+    window.addEventListener('load', () => {
+      // Adicionar evento de clique para cada ícone
+      const icons = document.querySelectorAll('.icon');
+      icons.forEach(icon => {
+        icon.addEventListener('click', showSkillInfo);
+      });
+      
+      // Conectar os ícones ao carregar a página
+      connectIcons();
+    });
   </script>
 </body>
 </html>
