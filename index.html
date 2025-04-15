@@ -31,7 +31,7 @@
       border-radius: 12px;
       text-align: center;
       padding: 12px;
-      width: 140px;
+      width: 240px;
       opacity: 0.4;
       pointer-events: none;
       position: relative;
@@ -52,6 +52,10 @@
       border-radius: 6px;
       margin-bottom: 8px;
     }
+    .skill .info {
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
     .upa-btn {
       background-color: gold;
       color: black;
@@ -60,7 +64,7 @@
       border-radius: 5px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 5px;
+      margin-top: 10px;
       display: none;
     }
     .connector {
@@ -109,38 +113,24 @@
   <div class="skill-tree" id="tree"></div>
   <div id="overlay"></div>
   <div id="test-box">
-    <div id="test-text">Você consegue reagir rápido o suficiente?</div>
-    <button onclick="concluirTeste()">Concluir Teste</button>
+    <div id="test-text">Carregando desafio...</div>
+    <button onclick="verificarResposta()">Enviar</button>
   </div>  <script>
-    const imagens = [
-      'Stampede_skill_icon.png',
-      'Shield_Charge_skill_icon.png',
-      'Shield_Wall_skill_icon.png',
-      'Seismic_Cry_skill_icon.png',
-      'Scavenged_Plating_skill_icon.png',
-      'Rolling_Slam_skill_icon.png',
-      'Resonating_Shield_skill_icon.png',
-      'Raise_Shield_skill_icon.png',
-      'Quarterstaff_Strike_skill_icon (1).png',
-      'Punch_skill_icon (1).png',
-      'Perfect_Strike_skill_icon.png',
-      'Parry_skill_icon.png',
-      'Mace_Strike_skill_icon.png',
-      'Leap_Slam_skill_icon.png',
-      'Infernal_Cry_skill_icon.png',
-      'Boneshatter_skill_icon.png',
-      'Berserk_skill_icon (1).png',
-      'Armour_Breaker_skill_icon (1).png',
-      'Ancestral_Warrior_Totem_skill_icon.png',
-      'Ancestral_Spirits_skill_icon.png'
+    const habilidades = [
+      { img: 'Stampede_skill_icon.png', nome: 'Stampede', desc: 'Investida poderosa.', level: 0, atributo: 'Físico', valor: 1 },
+      { img: 'Shield_Charge_skill_icon.png', nome: 'Shield Charge', desc: 'Investida com escudo.', level: 0, atributo: 'Físico', valor: 1 },
+      { img: 'Shield_Wall_skill_icon.png', nome: 'Shield Wall', desc: 'Defesa aumentada.', level: 0, atributo: 'Defesa', valor: 1 },
+      // ... (adicione as outras com mesmo padrão)
     ];
 
     const tree = document.getElementById('tree');
     let currentIndex = 0;
     let lastSkillClicked = null;
+    let desafioAtual = null;
+    let respostaEsperada = '';
 
     function criarSkillTree() {
-      imagens.forEach((src, index) => {
+      habilidades.forEach((skillData, index) => {
         if (index > 0) {
           const connector = document.createElement('div');
           connector.className = 'connector';
@@ -149,7 +139,10 @@
 
         const skill = document.createElement('div');
         skill.className = 'skill';
-        skill.innerHTML = `<img src="${src}" alt="Skill Icon">`;
+        skill.innerHTML = `
+          <img src="${skillData.img}" alt="${skillData.nome}">
+          <div class="info"><strong>${skillData.nome}</strong><br>${skillData.desc}<br>${skillData.atributo}: <span id="valor-${index}">${skillData.valor}</span> <br> Progresso: <span id="level-${index}">0/5</span></div>
+        `;
 
         const btn = document.createElement('button');
         btn.className = 'upa-btn';
@@ -170,19 +163,53 @@
     }
 
     function iniciarTeste(skill, index) {
+      desafioAtual = index;
+      gerarDesafio();
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('test-box').style.display = 'block';
-      lastSkillClicked = skill;
-      currentIndex = index;
     }
 
-    function concluirTeste() {
-      document.getElementById('overlay').style.display = 'none';
-      document.getElementById('test-box').style.display = 'none';
-      const proxima = document.querySelectorAll('.skill')[currentIndex + 1];
-      if (proxima) {
-        proxima.classList.add('unlocked');
-        alert('Teste superado! Próxima habilidade desbloqueada.');
+    function gerarDesafio() {
+      const tipo = Math.floor(Math.random() * 3);
+      const txt = document.getElementById('test-text');
+
+      if (tipo === 0) {
+        // Matemática
+        let a = Math.floor(Math.random() * 10 + 1);
+        let b = Math.floor(Math.random() * 10 + 1);
+        respostaEsperada = (a + b).toString();
+        txt.innerHTML = `Quanto é ${a} + ${b}? <br><input type='text' id='resposta'>`;
+      } else if (tipo === 1) {
+        // Ordem
+        let palavras = ['guerreiro', 'escudo', 'fúria', 'armadura'];
+        let mistura = palavras.sort(() => 0.5 - Math.random());
+        respostaEsperada = palavras.sort().join('');
+        txt.innerHTML = `Coloque essas palavras em ordem alfabética: ${mistura.join(', ')} <br><input type='text' id='resposta'>`;
+      } else {
+        // Simples quebra cabeça de lógica
+        respostaEsperada = '4';
+        txt.innerHTML = `Se 2 cães pegam 2 ossos em 2 minutos, quantos cães para 4 ossos em 2 minutos? <br><input type='text' id='resposta'>`;
+      }
+    }
+
+    function verificarResposta() {
+      const valor = document.getElementById('resposta').value.toLowerCase().replace(/\s/g, '');
+      if (valor === respostaEsperada) {
+        habilidades[desafioAtual].level++;
+        habilidades[desafioAtual].valor++;
+
+        document.getElementById(`level-${desafioAtual}`).textContent = `${habilidades[desafioAtual].level}/5`;
+        document.getElementById(`valor-${desafioAtual}`).textContent = habilidades[desafioAtual].valor;
+
+        if (habilidades[desafioAtual].level >= 5 && habilidades[desafioAtual + 1]) {
+          document.querySelectorAll('.skill')[desafioAtual + 1].classList.add('unlocked');
+          alert('Nova habilidade desbloqueada!');
+        }
+
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('test-box').style.display = 'none';
+      } else {
+        alert('Resposta incorreta! Tente novamente.');
       }
     }
 
