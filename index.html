@@ -1,1 +1,191 @@
-. 
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAGABOND</title>
+  <style>
+    body {
+      background-color: #0b0b0b;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 40px;
+      color: gold;
+    }
+    .skill-tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      position: relative;
+    }
+    .skill {
+      background-color: #1a1a1a;
+      border: 2px solid gold;
+      border-radius: 12px;
+      text-align: center;
+      padding: 12px;
+      width: 140px;
+      opacity: 0.4;
+      pointer-events: none;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.2s;
+    }
+    .skill.unlocked {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .skill:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+    .skill img {
+      width: 64px;
+      height: 64px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .upa-btn {
+      background-color: gold;
+      color: black;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+      display: none;
+    }
+    .connector {
+      width: 4px;
+      height: 40px;
+      background: gold;
+      margin: 0 auto;
+    }
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 5;
+      display: none;
+    }
+    #test-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #222;
+      border: 2px solid gold;
+      padding: 30px;
+      z-index: 10;
+      color: white;
+      display: none;
+      width: 300px;
+      text-align: center;
+    }
+    #test-box button {
+      margin-top: 20px;
+      padding: 8px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: gold;
+      border: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>VAGABOND</h1>
+  <div class="skill-tree" id="tree"></div>
+  <div id="overlay"></div>
+  <div id="test-box">
+    <div id="test-text">Você consegue reagir rápido o suficiente?</div>
+    <button onclick="concluirTeste()">Concluir Teste</button>
+  </div>  <script>
+    const imagens = [
+      'Stampede_skill_icon.png',
+      'Shield_Charge_skill_icon.png',
+      'Shield_Wall_skill_icon.png',
+      'Seismic_Cry_skill_icon.png',
+      'Scavenged_Plating_skill_icon.png',
+      'Rolling_Slam_skill_icon.png',
+      'Resonating_Shield_skill_icon.png',
+      'Raise_Shield_skill_icon.png',
+      'Quarterstaff_Strike_skill_icon (1).png',
+      'Punch_skill_icon (1).png',
+      'Perfect_Strike_skill_icon.png',
+      'Parry_skill_icon.png',
+      'Mace_Strike_skill_icon.png',
+      'Leap_Slam_skill_icon.png',
+      'Infernal_Cry_skill_icon.png',
+      'Boneshatter_skill_icon.png',
+      'Berserk_skill_icon (1).png',
+      'Armour_Breaker_skill_icon (1).png',
+      'Ancestral_Warrior_Totem_skill_icon.png',
+      'Ancestral_Spirits_skill_icon.png'
+    ];
+
+    const tree = document.getElementById('tree');
+    let currentIndex = 0;
+    let lastSkillClicked = null;
+
+    function criarSkillTree() {
+      imagens.forEach((src, index) => {
+        if (index > 0) {
+          const connector = document.createElement('div');
+          connector.className = 'connector';
+          tree.appendChild(connector);
+        }
+
+        const skill = document.createElement('div');
+        skill.className = 'skill';
+        skill.innerHTML = `<img src="${src}" alt="Skill Icon">`;
+
+        const btn = document.createElement('button');
+        btn.className = 'upa-btn';
+        btn.textContent = 'Upar';
+        btn.onclick = () => iniciarTeste(skill, index);
+        skill.appendChild(btn);
+
+        skill.onclick = () => {
+          if (skill.classList.contains('unlocked')) {
+            btn.style.display = 'inline-block';
+            lastSkillClicked = skill;
+          }
+        };
+
+        if (index === 0) skill.classList.add('unlocked');
+        tree.appendChild(skill);
+      });
+    }
+
+    function iniciarTeste(skill, index) {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('test-box').style.display = 'block';
+      lastSkillClicked = skill;
+      currentIndex = index;
+    }
+
+    function concluirTeste() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('test-box').style.display = 'none';
+      const proxima = document.querySelectorAll('.skill')[currentIndex + 1];
+      if (proxima) {
+        proxima.classList.add('unlocked');
+        alert('Teste superado! Próxima habilidade desbloqueada.');
+      }
+    }
+
+    criarSkillTree();
+  </script></body>
+</html>
